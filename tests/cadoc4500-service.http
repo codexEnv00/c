@@ -1,0 +1,25 @@
+@server = http://localhost:8080
+
+@filter = $filter=company/externalCode in ('1504') and interval eq '01' and exercise eq '2025'&$top=10
+
+### Estban
+# @name Estban_GET
+GET {{server}}/odata/v4/cadoc/4500/Estban?$filter=company/externalCode in ('1504','0102') and interval eq '01' and exercise eq '2025'&$top=10
+
+
+### Estban
+# @name Estban_GET
+GET {{server}}/odata/v4/cadoc/4500/Estban?$count=true&{{filter}}
+
+### TransmitBacen
+# @name TransmitBacen_POST
+POST {{server}}/odata/v4/cadoc/4500/transmitBacen
+Content-Type: application/json
+
+{
+   "companies":["1504"],
+   "exercise":"2025",
+   "interval":"01",
+   "user":"Ricardo Careta",
+   "remittanceType":"I"
+}

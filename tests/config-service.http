@@ -1,0 +1,59 @@
+@server = http://localhost:8080
+
+
+### Companies
+# @name Companies_GET
+GET {{server}}/odata/v4/config/Companies?$filter=visibility in (true, false)
+
+
+
+### Companies
+# @name Companies_POST
+POST {{server}}/odata/v4/config/Companies
+Content-Type: application/json
+
+{
+  "externalCode": "Companies-124609",
+  "name": "name-124609",
+  "cnpj": "cnpj-124609",
+  "segment": {
+    "ID": "20923257-b6ce-400e-9327-a17f777c9f61"
+  },
+  "visibility": false
+}
+
+
+### Companies
+# @name Companies_PATCH
+PATCH {{server}}/odata/v4/config/Companies/0101
+Content-Type: application/json
+
+{
+  "visibility": false
+}
+
+### Companies Lot
+# @name Companies_PATCH
+PATCH {{server}}/odata/v4/config/Companies
+Content-Type: application/json
+
+{
+    "@context": "#$delta",
+    "value": [
+        {
+            "externalCode": "0101",
+            "visibility": false
+        },
+        {
+            "externalCode": "0102",
+            "visibility": false
+        }
+    ]
+}
+
+
+
+### Companies
+# @name Companies_DELETE
+DELETE {{server}}/odata/v4/config/Companies/Companies-124609
+Content-Type: application/json

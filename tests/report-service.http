@@ -1,0 +1,81 @@
+@server = http://localhost:8080
+
+
+### Protocol
+# @name Protocol_GET
+GET {{server}}/odata/v4/report/Protocols
+
+
+
+### Protocol
+# @name Protocol_POST
+POST {{server}}/odata/v4/report/Protocol
+Content-Type: application/json
+
+{
+  "ID": "12104058-442d-4261-b521-7c24d82773d6",
+  "protocol": "protocol-12104058",
+  "createdAt": "2002-09-17T00:00:00.000Z",
+  "createdBy": "createdBy.77fju@example.com",
+  "modifiedAt": "2000-02-27T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.77fju@example.com"
+}
+
+
+### Protocol
+# @name Protocol_PATCH
+PATCH {{server}}/odata/v4/report/Protocol/12104058-442d-4261-b521-7c24d82773d6
+Content-Type: application/json
+
+{
+  "ID": "12104058-442d-4261-b521-7c24d82773d6",
+  "protocol": "protocol-12104058",
+  "createdAt": "2002-09-17T00:00:00.000Z",
+  "createdBy": "createdBy.77fju@example.com",
+  "modifiedAt": "2000-02-27T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.77fju@example.com"
+}
+
+
+### Protocol
+# @name Protocol_DELETE
+DELETE {{server}}/odata/v4/report/Protocol/12104058-442d-4261-b521-7c24d82773d6
+Content-Type: application/json
+
+
+### ProtocolDetails
+# @name ProtocolDetails_GET
+GET {{server}}/odata/v4/report/ProtocolData/75290624
+
+
+
+### ProtocolDetails
+# @name ProtocolDetails_POST
+POST {{server}}/odata/v4/report/ProtocolDetails
+Content-Type: application/json
+
+{
+  "ID": "12374580-b257-4fb8-b17c-99ff3e0473b7",
+  "protocol": {
+    "ID": "12104058-442d-4261-b521-7c24d82773d6"
+  }
+}
+
+
+### ProtocolDetails
+# @name ProtocolDetails_PATCH
+PATCH {{server}}/odata/v4/report/ProtocolDetails/12374580-b257-4fb8-b17c-99ff3e0473b7
+Content-Type: application/json
+
+{
+  "ID": "12374580-b257-4fb8-b17c-99ff3e0473b7",
+  "protocol": {
+    "ID": "12104058-442d-4261-b521-7c24d82773d6"
+  }
+}
+
+
+### ProtocolDetails
+# @name ProtocolDetails_DELETE
+DELETE {{server}}/odata/v4/report/ProtocolDetails/12374580-b257-4fb8-b17c-99ff3e0473b7
+Content-Type: application/json

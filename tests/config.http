@@ -1,0 +1,45 @@
+@server = http://localhost:8080
+
+### Segments
+POST {{server}}/config/import
+Content-Type: multipart/form-data; boundary=FileBoundary
+
+--FileBoundary
+Content-Disposition: form-data; name="file"; filename="file.csv"
+Content-Type: application/octet-stream
+
+< ./file.csv
+--FileBoundary--
+
+### add segments
+POST {{server}}/config/add
+Content-Type: application/json
+
+[
+	{
+		"company": "BR10",
+		"segment": "Contas",
+		"ecc": "101010",
+		"bacen": "1010"
+	},
+	{
+		"company": "BR11",
+		"segment": "Contas",
+		"ecc": "111",
+		"bacen": "123"
+	},
+	{
+		"company": "BR123",
+		"segment": "BANCO",
+		"ecc": "342",
+		"bacen": "32432"
+	}
+]
+
+
+### Delete All
+DELETE {{server}}/config/reset?pass=lab@123
+
+
+### Initial Data
+GET {{server}}/config/fill/data?pass=lab@123
