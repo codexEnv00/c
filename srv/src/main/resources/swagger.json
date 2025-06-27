@@ -1,0 +1,1982 @@
+{
+  "definitions": {
+    "AdminService": {
+      "kind": "service"
+    },
+    "AdminService.test": {
+      "kind": "function",
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "BalanceService": {
+      "kind": "service",
+      "@path": "balance",
+      "@title": "BalanceService OpenApi Definition",
+      "@Core.LongDescription": "BalanceService",
+      "@odata": true
+    },
+    "BalanceService.Balance": {
+      "kind": "entity",
+      "@readonly": true,
+      "elements": {
+        "nodeID": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "hierarchyLevel": {
+          "type": "cds.Integer"
+        },
+        "parentNodeID": {
+          "type": "cds.String"
+        },
+        "drillState": {
+          "type": "cds.String"
+        },
+        "company": {
+          "type": "cds.String"
+        },
+        "cnpj": {
+          "type": "cds.String"
+        },
+        "cosif": {
+          "type": "cds.String"
+        },
+        "razao": {
+          "type": "cds.String"
+        },
+        "description": {
+          "type": "cds.String"
+        },
+        "cadocBalance": {
+          "type": "cds.Double"
+        },
+        "originalCadocBalance": {
+          "type": "cds.Double"
+        }
+      }
+    },
+    "BalanceService.TerminationDocument": {
+      "kind": "entity",
+      "@readonly": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "sicredi.db.entities.TerminationDocument"
+          ]
+        }
+      },
+      "elements": {
+        "company": {
+          "key": true,
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "BalanceService.Company",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "externalCode"
+              ]
+            }
+          ]
+        },
+        "document": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "exercise": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "interval": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "item": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "cadoc": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "tpDoc": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "dtLanc": {
+          "key": true,
+          "type": "cds.Date"
+        },
+        "amount": {
+          "type": "cds.Double"
+        },
+        "razao": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "BalanceService.OutsideBalance": {
+      "kind": "entity",
+      "@readonly": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "sicredi.db.entities.OutsideBalance"
+          ]
+        }
+      },
+      "elements": {
+        "razaoAccount": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "company": {
+          "key": true,
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "BalanceService.Company",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "externalCode"
+              ]
+            }
+          ]
+        },
+        "cadoc": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "version": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "interval": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "exercise": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "cadocBalance": {
+          "type": "cds.Double"
+        },
+        "description": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "BalanceService.Company": {
+      "kind": "entity",
+      "doc": "Aspect for entities with canonical universal IDs\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-cuid",
+      "@readonly": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "ConfigService.Companies"
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "name": {
+          "type": "cds.String"
+        },
+        "externalCode": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "cnpj": {
+          "type": "cds.String"
+        },
+        "segment": {
+          "@assert.target": true,
+          "type": "cds.Association",
+          "target": "BalanceService.Segment",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "BalanceService.Segment": {
+      "kind": "entity",
+      "doc": "Aspect for entities with canonical universal IDs\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-cuid",
+      "@readonly": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "ConfigService.Segments"
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "name": {
+          "@mandatory": true,
+          "type": "cds.String"
+        }
+      }
+    },
+    "BalanceService.loadBalance": {
+      "kind": "action",
+      "params": {
+        "cadoc": {
+          "type": "cds.String"
+        },
+        "exercise": {
+          "type": "cds.String"
+        },
+        "version": {
+          "type": "cds.String"
+        },
+        "interval": {
+          "type": "cds.String"
+        },
+        "releaseDate": {
+          "type": "cds.Date"
+        },
+        "blc": {
+          "type": "cds.String"
+        },
+        "companies": {
+          "items": {
+            "type": "cds.String"
+          }
+        },
+        "tipoDoc": {
+          "items": {
+            "type": "cds.String"
+          }
+        }
+      }
+    },
+    "ConfigService": {
+      "kind": "service",
+      "@path": "config",
+      "@title": "ConfigService OpenApi Definition",
+      "@Core.LongDescription": "ConfigService"
+    },
+    "ConfigService.Segments": {
+      "kind": "entity",
+      "doc": "Aspect for entities with canonical universal IDs\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-cuid",
+      "projection": {
+        "from": {
+          "ref": [
+            "sicredi.db.entities.Segments"
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "name": {
+          "@mandatory": true,
+          "type": "cds.String"
+        }
+      }
+    },
+    "ConfigService.TipoDoc": {
+      "kind": "entity",
+      "@readonly": true,
+      "elements": {
+        "TipoDoc": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "DescrTipoDoc": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "ConfigService.Versao": {
+      "kind": "entity",
+      "@readonly": true,
+      "elements": {
+        "Versao": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "DescrVersao": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "ConfigService.Companies": {
+      "kind": "entity",
+      "doc": "Aspect for entities with canonical universal IDs\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-cuid",
+      "projection": {
+        "from": {
+          "ref": [
+            "sicredi.db.entities.Companies"
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "name": {
+          "type": "cds.String"
+        },
+        "externalCode": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "cnpj": {
+          "type": "cds.String"
+        },
+        "segment": {
+          "@assert.target": true,
+          "type": "cds.Association",
+          "target": "ConfigService.Segments",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "ConfigService.Account": {
+      "kind": "entity",
+      "doc": "Aspect for entities with canonical universal IDs\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-cuid",
+      "projection": {
+        "from": {
+          "ref": [
+            "sicredi.db.entities.Account"
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "company": {
+          "@assert.target": true,
+          "type": "cds.Association",
+          "target": "ConfigService.Companies",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "externalCode"
+              ]
+            }
+          ]
+        },
+        "segment": {
+          "@assert.target": true,
+          "type": "cds.Association",
+          "target": "ConfigService.Segments",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        },
+        "ecc": {
+          "@mandatory": true,
+          "type": "cds.String"
+        },
+        "bacen": {
+          "@mandatory": true,
+          "type": "cds.String"
+        }
+      }
+    },
+    "ConfigService.importAccount": {
+      "kind": "action"
+    },
+    "ReportService": {
+      "kind": "service",
+      "@path": "report",
+      "@title": "ReportService OpenApi Definition",
+      "@Core.LongDescription": "ReportService"
+    },
+    "ReportService.Protocols": {
+      "kind": "entity",
+      "doc": "Aspect to capture changes by user and name\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-managed",
+      "projection": {
+        "from": {
+          "ref": [
+            "sicredi.db.entities.Protocols"
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "createdAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedAt}",
+          "@readonly": true,
+          "type": "cds.Timestamp"
+        },
+        "createdBy": {
+          "doc": "Canonical user ID",
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedBy}",
+          "@readonly": true,
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "modifiedAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@cds.on.update": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@title": "{i18n>ChangedAt}",
+          "@readonly": true,
+          "type": "cds.Timestamp"
+        },
+        "modifiedBy": {
+          "doc": "Canonical user ID",
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@cds.on.update": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@title": "{i18n>ChangedBy}",
+          "@readonly": true,
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "protocol": {
+          "type": "cds.String"
+        },
+        "cadoc": {
+          "type": "cds.String"
+        },
+        "status": {
+          "type": "sicredi.db.entities.Status"
+        },
+        "segment": {
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "sicredi.db.entities.Segments",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        },
+        "details": {
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "ReportService.ProtocolDetails",
+          "on": [
+            {
+              "ref": [
+                "details",
+                "protocol"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "ReportService.ProtocolDetails": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "sicredi.db.entities.ProtocolDetails"
+          ]
+        }
+      },
+      "elements": {
+        "razaoAccount": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "company": {
+          "key": true,
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "sicredi.db.entities.Companies",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "externalCode"
+              ]
+            }
+          ]
+        },
+        "cadoc": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "version": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "interval": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "exercise": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "cadocBalance": {
+          "type": "cds.Double"
+        },
+        "description": {
+          "type": "cds.String"
+        },
+        "cosifAccount": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "level": {
+          "type": "cds.Integer"
+        },
+        "parentKey": {
+          "type": "cds.String"
+        },
+        "drillState": {
+          "type": "cds.String"
+        },
+        "nodeID": {
+          "type": "cds.String"
+        },
+        "order": {
+          "type": "cds.Integer"
+        },
+        "protocol": {
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "ReportService.Protocols",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "sicredi.db.entities.Balances": {
+      "kind": "entity",
+      "includes": [
+        "sicredi.db.entities.BalanceBase"
+      ],
+      "elements": {
+        "razaoAccount": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "company": {
+          "key": true,
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "sicredi.db.entities.Companies",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "externalCode"
+              ]
+            }
+          ]
+        },
+        "cadoc": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "version": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "interval": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "exercise": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "cadocBalance": {
+          "type": "cds.Double"
+        },
+        "description": {
+          "type": "cds.String"
+        },
+        "cosifAccount": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "level": {
+          "type": "cds.Integer"
+        },
+        "parentKey": {
+          "type": "cds.String"
+        },
+        "drillState": {
+          "type": "cds.String"
+        },
+        "nodeID": {
+          "type": "cds.String"
+        },
+        "order": {
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "sicredi.db.entities.OutsideBalance": {
+      "kind": "entity",
+      "includes": [
+        "sicredi.db.entities.BalanceBase"
+      ],
+      "elements": {
+        "razaoAccount": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "company": {
+          "key": true,
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "sicredi.db.entities.Companies",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "externalCode"
+              ]
+            }
+          ]
+        },
+        "cadoc": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "version": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "interval": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "exercise": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "cadocBalance": {
+          "type": "cds.Double"
+        },
+        "description": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "sicredi.db.entities.BalanceBase": {
+      "kind": "aspect",
+      "elements": {
+        "razaoAccount": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "company": {
+          "key": true,
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "sicredi.db.entities.Companies",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "externalCode"
+              ]
+            }
+          ]
+        },
+        "cadoc": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "version": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "interval": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "exercise": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "cadocBalance": {
+          "type": "cds.Double"
+        },
+        "description": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "sicredi.db.entities.Cadoc": {
+      "kind": "entity",
+      "doc": "Aspect for entities with canonical universal IDs\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-cuid",
+      "includes": [
+        "cuid"
+      ],
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "company": {
+          "key": true,
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "sicredi.db.entities.Companies",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "externalCode"
+              ]
+            }
+          ]
+        },
+        "version": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "interval": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "exercise": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "cadoc": {
+          "key": true,
+          "type": "cds.String"
+        }
+      }
+    },
+    "sicredi.db.entities.Segments": {
+      "kind": "entity",
+      "doc": "Aspect for entities with canonical universal IDs\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-cuid",
+      "includes": [
+        "cuid"
+      ],
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "name": {
+          "@mandatory": true,
+          "type": "cds.String"
+        }
+      }
+    },
+    "sicredi.db.entities.Companies": {
+      "kind": "entity",
+      "doc": "Aspect for entities with canonical universal IDs\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-cuid",
+      "includes": [
+        "cuid"
+      ],
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "name": {
+          "type": "cds.String"
+        },
+        "externalCode": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "cnpj": {
+          "type": "cds.String"
+        },
+        "segment": {
+          "@assert.target": true,
+          "type": "cds.Association",
+          "target": "sicredi.db.entities.Segments",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "sicredi.db.entities.Account": {
+      "kind": "entity",
+      "doc": "Aspect for entities with canonical universal IDs\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-cuid",
+      "includes": [
+        "cuid"
+      ],
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "company": {
+          "@assert.target": true,
+          "type": "cds.Association",
+          "target": "sicredi.db.entities.Companies",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "externalCode"
+              ]
+            }
+          ]
+        },
+        "segment": {
+          "@assert.target": true,
+          "type": "cds.Association",
+          "target": "sicredi.db.entities.Segments",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        },
+        "ecc": {
+          "@mandatory": true,
+          "type": "cds.String"
+        },
+        "bacen": {
+          "@mandatory": true,
+          "type": "cds.String"
+        }
+      }
+    },
+    "sicredi.db.entities.TerminationDocument": {
+      "kind": "entity",
+      "elements": {
+        "company": {
+          "key": true,
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "sicredi.db.entities.Companies",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "externalCode"
+              ]
+            }
+          ]
+        },
+        "document": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "exercise": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "interval": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "item": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "cadoc": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "tpDoc": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "dtLanc": {
+          "key": true,
+          "type": "cds.Date"
+        },
+        "amount": {
+          "type": "cds.Double"
+        },
+        "razao": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "sicredi.db.entities.Status": {
+      "kind": "type",
+      "type": "cds.String",
+      "enum": {
+        "GENERATED": {
+          "val": "Gerado"
+        },
+        "REGENERATED": {
+          "val": "Regerado"
+        },
+        "PROCESSING": {
+          "val": "Processando"
+        },
+        "FAILURE": {
+          "val": "Falha"
+        }
+      }
+    },
+    "sicredi.db.entities.Protocols": {
+      "kind": "entity",
+      "doc": "Aspect to capture changes by user and name\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-managed",
+      "includes": [
+        "cuid",
+        "managed"
+      ],
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "createdAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedAt}",
+          "@readonly": true,
+          "type": "cds.Timestamp"
+        },
+        "createdBy": {
+          "doc": "Canonical user ID",
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedBy}",
+          "@readonly": true,
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "modifiedAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@cds.on.update": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@title": "{i18n>ChangedAt}",
+          "@readonly": true,
+          "type": "cds.Timestamp"
+        },
+        "modifiedBy": {
+          "doc": "Canonical user ID",
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@cds.on.update": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@title": "{i18n>ChangedBy}",
+          "@readonly": true,
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "protocol": {
+          "type": "cds.String"
+        },
+        "cadoc": {
+          "type": "cds.String"
+        },
+        "status": {
+          "type": "sicredi.db.entities.Status"
+        },
+        "segment": {
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "sicredi.db.entities.Segments",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        },
+        "details": {
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "sicredi.db.entities.ProtocolDetails",
+          "on": [
+            {
+              "ref": [
+                "details",
+                "protocol"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "sicredi.db.entities.ProtocolDetails": {
+      "kind": "entity",
+      "includes": [
+        "sicredi.db.entities.Balances"
+      ],
+      "elements": {
+        "razaoAccount": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "company": {
+          "key": true,
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "sicredi.db.entities.Companies",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "externalCode"
+              ]
+            }
+          ]
+        },
+        "cadoc": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "version": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "interval": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "exercise": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "cadocBalance": {
+          "type": "cds.Double"
+        },
+        "description": {
+          "type": "cds.String"
+        },
+        "cosifAccount": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "level": {
+          "type": "cds.Integer"
+        },
+        "parentKey": {
+          "type": "cds.String"
+        },
+        "drillState": {
+          "type": "cds.String"
+        },
+        "nodeID": {
+          "type": "cds.String"
+        },
+        "order": {
+          "type": "cds.Integer"
+        },
+        "protocol": {
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "sicredi.db.entities.Protocols",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Language": {
+      "kind": "type",
+      "doc": "Type for an association to Languages\n\nSee https://cap.cloud.sap/docs/cds/common#type-language",
+      "@title": "{i18n>Language}",
+      "@description": "{i18n>LanguageCode.Description}",
+      "type": "cds.Association",
+      "target": "sap.common.Languages",
+      "keys": [
+        {
+          "ref": [
+            "code"
+          ]
+        }
+      ]
+    },
+    "Currency": {
+      "kind": "type",
+      "doc": "Type for an association to Currencies\n\nSee https://cap.cloud.sap/docs/cds/common#type-currency",
+      "@title": "{i18n>Currency}",
+      "@description": "{i18n>CurrencyCode.Description}",
+      "type": "cds.Association",
+      "target": "sap.common.Currencies",
+      "keys": [
+        {
+          "ref": [
+            "code"
+          ]
+        }
+      ]
+    },
+    "Country": {
+      "kind": "type",
+      "doc": "Type for an association to Countries\n\nSee https://cap.cloud.sap/docs/cds/common#type-country",
+      "@title": "{i18n>Country}",
+      "@description": "{i18n>CountryCode.Description}",
+      "type": "cds.Association",
+      "target": "sap.common.Countries",
+      "keys": [
+        {
+          "ref": [
+            "code"
+          ]
+        }
+      ]
+    },
+    "Timezone": {
+      "kind": "type",
+      "doc": "Type for an association to Timezones\n\nSee https://cap.cloud.sap/docs/cds/common#type-timezone",
+      "type": "cds.Association",
+      "target": "sap.common.Timezones",
+      "keys": [
+        {
+          "ref": [
+            "code"
+          ]
+        }
+      ]
+    },
+    "sap.common": {
+      "kind": "context",
+      "doc": "Entities to serve the reuse types with extensible code lists\nincluding built-in support for value lists in Fiori."
+    },
+    "sap.common.Locale": {
+      "kind": "type",
+      "doc": "Type for a language code",
+      "@title": "{i18n>LanguageCode}",
+      "type": "cds.String",
+      "length": 14
+    },
+    "sap.common.Languages": {
+      "kind": "entity",
+      "doc": "Code list for languages\n\nSee https://cap.cloud.sap/docs/cds/common#entity-languages",
+      "@cds.autoexpose": true,
+      "@cds.persistence.skip": "if-unused",
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name"
+          }
+        }
+      ],
+      "@cds.odata.valuelist": true,
+      "includes": [
+        "sap.common.CodeList"
+      ],
+      "elements": {
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 255
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 1000
+        },
+        "code": {
+          "doc": "Type for a language code",
+          "@Common.Text": {
+            "=": "name"
+          },
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "sap.common.Locale",
+          "length": 14
+        },
+        "texts": {
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "sap.common.Languages.texts",
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            }
+          ]
+        },
+        "localized": {
+          "type": "cds.Association",
+          "target": "sap.common.Languages.texts",
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "sap.common.Countries": {
+      "kind": "entity",
+      "doc": "Code list for countries\n\nSee https://cap.cloud.sap/docs/cds/common#entity-countries",
+      "@cds.autoexpose": true,
+      "@cds.persistence.skip": "if-unused",
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name"
+          }
+        }
+      ],
+      "@cds.odata.valuelist": true,
+      "includes": [
+        "sap.common.CodeList"
+      ],
+      "elements": {
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 255
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 1000
+        },
+        "code": {
+          "@title": "{i18n>CountryCode}",
+          "@Common.Text": {
+            "=": "name"
+          },
+          "key": true,
+          "type": "cds.String",
+          "length": 3
+        },
+        "texts": {
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "sap.common.Countries.texts",
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            }
+          ]
+        },
+        "localized": {
+          "type": "cds.Association",
+          "target": "sap.common.Countries.texts",
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "sap.common.Currencies": {
+      "kind": "entity",
+      "doc": "Code list for currencies\n\nSee https://cap.cloud.sap/docs/cds/common#entity-currencies",
+      "@cds.autoexpose": true,
+      "@cds.persistence.skip": "if-unused",
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name"
+          }
+        }
+      ],
+      "@cds.odata.valuelist": true,
+      "includes": [
+        "sap.common.CodeList"
+      ],
+      "elements": {
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 255
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 1000
+        },
+        "code": {
+          "@title": "{i18n>CurrencyCode}",
+          "@Common.Text": {
+            "=": "name"
+          },
+          "key": true,
+          "type": "cds.String",
+          "length": 3
+        },
+        "symbol": {
+          "@title": "{i18n>CurrencySymbol}",
+          "type": "cds.String",
+          "length": 5
+        },
+        "minorUnit": {
+          "@title": "{i18n>CurrencyMinorUnit}",
+          "type": "cds.Int16"
+        },
+        "texts": {
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "sap.common.Currencies.texts",
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            }
+          ]
+        },
+        "localized": {
+          "type": "cds.Association",
+          "target": "sap.common.Currencies.texts",
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "sap.common.Timezones": {
+      "kind": "entity",
+      "doc": "Code list for time zones\n\nSee https://cap.cloud.sap/docs/cds/common#entity-timezones",
+      "@cds.autoexpose": true,
+      "@cds.persistence.skip": "if-unused",
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name"
+          }
+        }
+      ],
+      "@cds.odata.valuelist": true,
+      "includes": [
+        "sap.common.CodeList"
+      ],
+      "elements": {
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 255
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 1000
+        },
+        "code": {
+          "@title": "{i18n>TimeZoneCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 100
+        },
+        "texts": {
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "sap.common.Timezones.texts",
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            }
+          ]
+        },
+        "localized": {
+          "type": "cds.Association",
+          "target": "sap.common.Timezones.texts",
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "code"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "code"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "sap.common.CodeList": {
+      "kind": "aspect",
+      "doc": "Aspect for a code list with name and description\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-codelist",
+      "@cds.autoexpose": true,
+      "@cds.persistence.skip": "if-unused",
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name"
+          }
+        }
+      ],
+      "@cds.odata.valuelist": true,
+      "elements": {
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 255
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": true,
+          "type": "cds.String",
+          "length": 1000
+        }
+      }
+    },
+    "sap.common.TextsAspect": {
+      "kind": "aspect",
+      "elements": {
+        "locale": {
+          "doc": "Type for a language code",
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "sap.common.Locale",
+          "length": 14
+        }
+      }
+    },
+    "cuid": {
+      "kind": "aspect",
+      "doc": "Aspect for entities with canonical universal IDs\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-cuid",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        }
+      }
+    },
+    "managed": {
+      "kind": "aspect",
+      "doc": "Aspect to capture changes by user and name\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-managed",
+      "elements": {
+        "createdAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedAt}",
+          "@readonly": true,
+          "type": "cds.Timestamp"
+        },
+        "createdBy": {
+          "doc": "Canonical user ID",
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@Core.Immutable": true,
+          "@title": "{i18n>CreatedBy}",
+          "@readonly": true,
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        },
+        "modifiedAt": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "@cds.on.update": {
+            "=": "$now"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@title": "{i18n>ChangedAt}",
+          "@readonly": true,
+          "type": "cds.Timestamp"
+        },
+        "modifiedBy": {
+          "doc": "Canonical user ID",
+          "@cds.on.insert": {
+            "=": "$user"
+          },
+          "@cds.on.update": {
+            "=": "$user"
+          },
+          "@UI.HiddenFilter": true,
+          "@UI.ExcludeFromNavigationContext": true,
+          "@title": "{i18n>ChangedBy}",
+          "@readonly": true,
+          "@description": "{i18n>UserID.Description}",
+          "type": "User",
+          "length": 255
+        }
+      }
+    },
+    "temporal": {
+      "kind": "aspect",
+      "doc": "Aspect for entities with temporal data\n\nSee https://cap.cloud.sap/docs/cds/common#aspect-temporal",
+      "elements": {
+        "validFrom": {
+          "@cds.valid.from": true,
+          "type": "cds.Timestamp"
+        },
+        "validTo": {
+          "@cds.valid.to": true,
+          "type": "cds.Timestamp"
+        }
+      }
+    },
+    "User": {
+      "kind": "type",
+      "doc": "Canonical user ID",
+      "@title": "{i18n>UserID}",
+      "@description": "{i18n>UserID.Description}",
+      "type": "cds.String",
+      "length": 255
+    },
+    "sap.common.Languages.texts": {
+      "kind": "entity",
+      "@odata.draft.enabled": false,
+      "includes": [
+        "sap.common.TextsAspect"
+      ],
+      "elements": {
+        "locale": {
+          "doc": "Type for a language code",
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "sap.common.Locale",
+          "length": 14
+        },
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 255
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 1000
+        },
+        "code": {
+          "doc": "Type for a language code",
+          "@odata.containment.ignore": true,
+          "@Common.Text": {
+            "=": "name"
+          },
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "sap.common.Locale",
+          "length": 14
+        }
+      }
+    },
+    "sap.common.Countries.texts": {
+      "kind": "entity",
+      "@odata.draft.enabled": false,
+      "includes": [
+        "sap.common.TextsAspect"
+      ],
+      "elements": {
+        "locale": {
+          "doc": "Type for a language code",
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "sap.common.Locale",
+          "length": 14
+        },
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 255
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 1000
+        },
+        "code": {
+          "@odata.containment.ignore": true,
+          "@title": "{i18n>CountryCode}",
+          "@Common.Text": {
+            "=": "name"
+          },
+          "key": true,
+          "type": "cds.String",
+          "length": 3
+        }
+      }
+    },
+    "sap.common.Currencies.texts": {
+      "kind": "entity",
+      "@odata.draft.enabled": false,
+      "includes": [
+        "sap.common.TextsAspect"
+      ],
+      "elements": {
+        "locale": {
+          "doc": "Type for a language code",
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "sap.common.Locale",
+          "length": 14
+        },
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 255
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 1000
+        },
+        "code": {
+          "@odata.containment.ignore": true,
+          "@title": "{i18n>CurrencyCode}",
+          "@Common.Text": {
+            "=": "name"
+          },
+          "key": true,
+          "type": "cds.String",
+          "length": 3
+        }
+      }
+    },
+    "sap.common.Timezones.texts": {
+      "kind": "entity",
+      "@odata.draft.enabled": false,
+      "includes": [
+        "sap.common.TextsAspect"
+      ],
+      "elements": {
+        "locale": {
+          "doc": "Type for a language code",
+          "@title": "{i18n>LanguageCode}",
+          "key": true,
+          "type": "sap.common.Locale",
+          "length": 14
+        },
+        "name": {
+          "@title": "{i18n>Name}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 255
+        },
+        "descr": {
+          "@title": "{i18n>Description}",
+          "localized": null,
+          "type": "cds.String",
+          "length": 1000
+        },
+        "code": {
+          "@odata.containment.ignore": true,
+          "@title": "{i18n>TimeZoneCode}",
+          "key": true,
+          "type": "cds.String",
+          "length": 100
+        }
+      }
+    }
+  },
+  "meta": {
+    "creator": "CDS Compiler v5.4.2",
+    "flavor": "inferred"
+  },
+  "$version": "2.0"
+}
