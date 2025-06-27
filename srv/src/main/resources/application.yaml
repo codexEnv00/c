@@ -1,0 +1,65 @@
+---
+spring:
+  config.activate.on-profile: default
+  sql.init.schema-locations: classpath:schema-h2.sql
+cds:
+  data-source.auto-config.enabled: false
+  security:
+    authentication:
+      mode: always
+---
+server:
+  error:
+    include-stacktrace: never
+
+cds.security.authentication.mode: none
+
+logging.level:
+  org.apache.http.client: INFO
+  # com.sap.cloud.security.xsuaa.client: INFO
+  # com.sap.cds.persistence.sql: DEBUG
+
+springdoc:
+  api-docs:
+    path: /swagger/v3/api-docs
+  swagger-ui:
+    oauth:
+      client-id: sb-sicredi-regulatoria-cap!t18491
+
+    disable-swagger-default-url: true
+    path: /swagger/index.html
+    config-url: /swagger/v3/api-docs/swagger-config
+    urls:
+    - url: /swagger/v3/api-docs
+      name: Services
+      display-name: Rest Services
+       
+    - url: /swagger/ConfigService.openapi3.json
+      display-name: OData ConfigService
+      name: OData4ConfigService
+
+    - url: /swagger/BalanceService.openapi3.json
+      display-name: OData BalanceService
+      name: OData4BalanceService
+
+    - url: /swagger/ReportService.openapi3.json
+      display-name: OData ReportService
+      name: OData4ReportService
+
+management:
+  endpoint:
+    health:
+      show-components: always
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  health:
+    defaults:
+      enabled: false
+    ping:
+      enabled: true
+    db:
+      enabled: true
