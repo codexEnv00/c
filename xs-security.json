@@ -1,0 +1,12 @@
+{
+  "oauth2-configuration": {
+    "credential-types": [],
+    "redirect-uris": [
+      "https://*.applicationstudio.cloud.sap/**",
+      "https://**.hana.ondemand.com/**"
+    ]
+  },
+  "scopes": [],
+  "attributes": [],
+  "role-templates": []
+}
